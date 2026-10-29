@@ -134,7 +134,7 @@ coherencia del trabajo.
 - Entregas 1, 2 y 3 del proyecto.
 - Material y videos incluidos en el entorno virtual de la materia.
 
-- ## Indicadores de control y estándares de desempeño
+## Indicadores de control y estándares de desempeño
 
 Los siguientes estándares son objetivos para la futura implementación.
 No representan resultados de pruebas ya realizadas.
