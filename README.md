@@ -98,8 +98,14 @@ Los commits deben describir claramente los cambios realizados.
 La revisión de pares debe ser efectuada por otra persona y quedar
 registrada en GitHub antes de la integración correspondiente.
 
-El tablero de gestión se encuentra pendiente de creación. Se
-organizará con los estados Por Hacer, En Progreso y Listo.
+El seguimiento del proyecto se realiza en el siguiente tablero público:
+
+[Tablero de gestión de Puma Lubricants](https://github.com/users/gianisgro2-code/projects/1)
+
+Los estados utilizados son Todo (Por Hacer), In Progress (En Progreso)
+y Done (Listo). Las historias de usuario permanecen pendientes de
+implementación; las tareas de documentación avanzan según el trabajo
+efectivamente realizado.
 
 ## Declaración de Uso de IA
 
