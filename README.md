@@ -133,3 +133,32 @@ coherencia del trabajo.
 - Guía Git y GitHub de la cátedra.
 - Entregas 1, 2 y 3 del proyecto.
 - Material y videos incluidos en el entorno virtual de la materia.
+
+- ## Indicadores de control y estándares de desempeño
+
+Los siguientes estándares son objetivos para la futura implementación.
+No representan resultados de pruebas ya realizadas.
+
+| Indicador | Estándar esperado | Método de verificación |
+|---|---|---|
+| Tiempo de respuesta | Hasta 3 segundos en las operaciones habituales. | Medir registros, solicitudes y consultas en un entorno de prueba documentado. |
+| Capacidad de almacenamiento | Al menos 10.000 registros de jornadas. | Cargar datos de prueba y comprobar su registro y consulta. |
+| Integridad de datos | El 100 % de los registros aceptados cumple los campos obligatorios y las reglas de validación. | Probar datos válidos, incompletos, superpuestos y fuera de rango. |
+| Autorización de solicitudes | El 100 % de las resoluciones corresponde a un supervisor autorizado, sin resolver solicitudes propias. | Probar accesos permitidos y prohibidos con distintos usuarios. |
+| Trazabilidad de resoluciones | El 100 % de las solicitudes resueltas registra revisor, fecha y hora; los rechazos incluyen observación. | Consultar los registros y verificar los datos de resolución. |
+| Exactitud de los reportes | Los totales de extras autorizadas incluyen únicamente solicitudes aprobadas. | Comparar los reportes con cálculos manuales sobre un conjunto conocido de datos. |
+
+### Responsables y seguimiento
+
+- El responsable técnico ejecutará las verificaciones antes de cada versión y después de cambios que afecten estas reglas.
+- Supervisión de Producción validará los casos de aprobación y rechazo.
+- Administración comprobará los reportes y sus totales.
+- Se conservarán como evidencia los casos utilizados, resultados esperados, resultados obtenidos y condiciones de prueba.
+
+### Acciones correctivas
+
+Si un resultado no cumple el estándar, se abrirá una issue con el problema, su impacto y los pasos para reproducirlo. Se realizará la corrección en una rama secundaria y se repetirá la verificación antes de considerar resuelto el desvío.
+
+### Estado actual
+
+Las verificaciones están pendientes de ejecución porque el proyecto se encuentra en la etapa de análisis y documentación.
