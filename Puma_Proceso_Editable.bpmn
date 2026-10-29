@@ -1,0 +1,360 @@
+<?xml version='1.0' encoding='utf-8'?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Puma" targetNamespace="https://puma.example/horas" exporter="Modelo académico Puma">
+  <bpmn:collaboration id="Collaboration_Puma">
+    <bpmn:participant id="Pool_Puma" name="Puma Lubricants" processRef="Process_Puma" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Puma" name="Registro de jornadas y autorización de horas extras" isExecutable="false">
+    <bpmn:laneSet id="Lanes_Puma">
+      <bpmn:lane id="Lane_0" name="Operario de Producción">
+        <bpmn:flowNodeRef>inicio</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>jornada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gExtra</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>sinExtra</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>solicitar</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_1" name="Sistema">
+        <bpmn:flowNodeRef>validarJ</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gJ</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>calcular</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>validarS</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gS</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>pendiente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>aprobar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>rechazar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>union</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_2" name="Supervisión de Producción">
+        <bpmn:flowNodeRef>revisar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>motivo</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_3" name="Administración">
+        <bpmn:flowNodeRef>reporte</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>fin</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="inicio" name="Inicio de jornada">
+      <bpmn:outgoing>Flow_0</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="jornada" name="Registrar entrada y, al finalizar, salida y pausas">
+      <bpmn:incoming>Flow_0</bpmn:incoming>
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+    </bpmn:task>
+    <bpmn:serviceTask id="validarJ" name="Validar jornada">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="gJ" name="¿Jornada válida?">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="calcular" name="Calcular tiempo trabajado y extras disponibles">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="gExtra" name="¿Solicita extras?">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="sinExtra" name="Jornada registrada sin solicitud">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="solicitar" name="Ingresar minutos y motivo; enviar solicitud">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+      <bpmn:incoming>Flow_10</bpmn:incoming>
+    </bpmn:task>
+    <bpmn:serviceTask id="validarS" name="Validar solicitud">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="gS" name="¿Solicitud válida?">
+      <bpmn:incoming>Flow_9</bpmn:incoming>
+      <bpmn:outgoing>Flow_10</bpmn:outgoing>
+      <bpmn:outgoing>Flow_11</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="pendiente" name="Guardar solicitud pendiente">
+      <bpmn:incoming>Flow_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_12</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:task id="revisar" name="Revisar jornada y solicitud">
+      <bpmn:incoming>Flow_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_13</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="gA" name="¿Aprueba?">
+      <bpmn:incoming>Flow_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_14</bpmn:outgoing>
+      <bpmn:outgoing>Flow_15</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="aprobar" name="Guardar aprobada y resolución">
+      <bpmn:incoming>Flow_14</bpmn:incoming>
+      <bpmn:outgoing>Flow_17</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:task id="motivo" name="Indicar motivo del rechazo">
+      <bpmn:incoming>Flow_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_16</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:serviceTask id="rechazar" name="Guardar rechazada y resolución">
+      <bpmn:incoming>Flow_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_18</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="union" name="">
+      <bpmn:incoming>Flow_17</bpmn:incoming>
+      <bpmn:incoming>Flow_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_19</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="reporte" name="Consultar reportes por empleado y período">
+      <bpmn:incoming>Flow_19</bpmn:incoming>
+      <bpmn:outgoing>Flow_20</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="fin" name="Consulta finalizada">
+      <bpmn:incoming>Flow_20</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0" sourceRef="inicio" targetRef="jornada" name="" />
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="jornada" targetRef="validarJ" name="" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="validarJ" targetRef="gJ" name="" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="gJ" targetRef="jornada" name="No: corregir" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="gJ" targetRef="calcular" name="Sí" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="calcular" targetRef="gExtra" name="" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="gExtra" targetRef="sinExtra" name="No" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="gExtra" targetRef="solicitar" name="Sí" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="solicitar" targetRef="validarS" name="" />
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="validarS" targetRef="gS" name="" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="gS" targetRef="solicitar" name="No: corregir" />
+    <bpmn:sequenceFlow id="Flow_11" sourceRef="gS" targetRef="pendiente" name="Sí" />
+    <bpmn:sequenceFlow id="Flow_12" sourceRef="pendiente" targetRef="revisar" name="" />
+    <bpmn:sequenceFlow id="Flow_13" sourceRef="revisar" targetRef="gA" name="" />
+    <bpmn:sequenceFlow id="Flow_14" sourceRef="gA" targetRef="aprobar" name="Sí" />
+    <bpmn:sequenceFlow id="Flow_15" sourceRef="gA" targetRef="motivo" name="No" />
+    <bpmn:sequenceFlow id="Flow_16" sourceRef="motivo" targetRef="rechazar" name="" />
+    <bpmn:sequenceFlow id="Flow_17" sourceRef="aprobar" targetRef="union" name="" />
+    <bpmn:sequenceFlow id="Flow_18" sourceRef="rechazar" targetRef="union" name="" />
+    <bpmn:sequenceFlow id="Flow_19" sourceRef="union" targetRef="reporte" name="" />
+    <bpmn:sequenceFlow id="Flow_20" sourceRef="reporte" targetRef="fin" name="" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Puma">
+    <bpmndi:BPMNPlane id="Plane_Puma" bpmnElement="Collaboration_Puma">
+      <bpmndi:BPMNShape id="Shape_Pool_Puma" bpmnElement="Pool_Puma" isHorizontal="true">
+        <dc:Bounds x="20" y="100" width="2390" height="710" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_0" bpmnElement="Lane_0" isHorizontal="true">
+        <dc:Bounds x="55" y="100" width="2355" height="180" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_1" bpmnElement="Lane_1" isHorizontal="true">
+        <dc:Bounds x="55" y="280" width="2355" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_2" bpmnElement="Lane_2" isHorizontal="true">
+        <dc:Bounds x="55" y="480" width="2355" height="180" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_3" bpmnElement="Lane_3" isHorizontal="true">
+        <dc:Bounds x="55" y="660" width="2355" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_inicio" bpmnElement="inicio">
+        <dc:Bounds x="129.0" y="169.0" width="32" height="32" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="60" y="210" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_jornada" bpmnElement="jornada">
+        <dc:Bounds x="190.0" y="144.0" width="190" height="82" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_validarJ" bpmnElement="validarJ">
+        <dc:Bounds x="387.5" y="330.0" width="155" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_gJ" bpmnElement="gJ">
+        <dc:Bounds x="586.0" y="346.0" width="48" height="48" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="525" y="293" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_calcular" bpmnElement="calcular">
+        <dc:Bounds x="677.5" y="330.0" width="165" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_gExtra" bpmnElement="gExtra">
+        <dc:Bounds x="896.0" y="161.0" width="48" height="48" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="835" y="108" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_sinExtra" bpmnElement="sinExtra">
+        <dc:Bounds x="1044.0" y="109.0" width="32" height="32" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1065" y="90" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_solicitar" bpmnElement="solicitar">
+        <dc:Bounds x="1020.0" y="175.0" width="180" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_validarS" bpmnElement="validarS">
+        <dc:Bounds x="1215.0" y="330.0" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_gS" bpmnElement="gS">
+        <dc:Bounds x="1416.0" y="346.0" width="48" height="48" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1355" y="293" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_pendiente" bpmnElement="pendiente">
+        <dc:Bounds x="1507.5" y="330.0" width="175" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_revisar" bpmnElement="revisar">
+        <dc:Bounds x="1507.5" y="515.0" width="175" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_gA" bpmnElement="gA">
+        <dc:Bounds x="1736.0" y="531.0" width="48" height="48" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1675" y="478" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_aprobar" bpmnElement="aprobar">
+        <dc:Bounds x="1817.5" y="280.0" width="165" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_motivo" bpmnElement="motivo">
+        <dc:Bounds x="1817.5" y="520.0" width="165" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_rechazar" bpmnElement="rechazar">
+        <dc:Bounds x="1817.5" y="395.0" width="165" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_union" bpmnElement="union">
+        <dc:Bounds x="2048.0" y="348.0" width="44" height="44" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1985" y="293" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_reporte" bpmnElement="reporte">
+        <dc:Bounds x="2140.0" y="695.0" width="180" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_fin" bpmnElement="fin">
+        <dc:Bounds x="2354.0" y="719.0" width="32" height="32" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2285" y="760" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_0" bpmnElement="Flow_0">
+        <di:waypoint x="161" y="185" />
+        <di:waypoint x="190" y="185" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_1" bpmnElement="Flow_1">
+        <di:waypoint x="380" y="185" />
+        <di:waypoint x="465" y="185" />
+        <di:waypoint x="465" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_2" bpmnElement="Flow_2">
+        <di:waypoint x="542.5" y="370" />
+        <di:waypoint x="586" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_3" bpmnElement="Flow_3">
+        <di:waypoint x="610" y="346" />
+        <di:waypoint x="610" y="260" />
+        <di:waypoint x="285" y="260" />
+        <di:waypoint x="285" y="226" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="410" y="234" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_4" bpmnElement="Flow_4">
+        <di:waypoint x="634" y="370" />
+        <di:waypoint x="677.5" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="606" y="384" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_5" bpmnElement="Flow_5">
+        <di:waypoint x="842.5" y="370" />
+        <di:waypoint x="920" y="370" />
+        <di:waypoint x="920" y="209" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_6" bpmnElement="Flow_6">
+        <di:waypoint x="920" y="161" />
+        <di:waypoint x="920" y="125" />
+        <di:waypoint x="1044" y="125" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="900" y="99" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_7" bpmnElement="Flow_7">
+        <di:waypoint x="944" y="185" />
+        <di:waypoint x="980" y="185" />
+        <di:waypoint x="980" y="215" />
+        <di:waypoint x="1020" y="215" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="930" y="159" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_8" bpmnElement="Flow_8">
+        <di:waypoint x="1200" y="215" />
+        <di:waypoint x="1295" y="215" />
+        <di:waypoint x="1295" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_9" bpmnElement="Flow_9">
+        <di:waypoint x="1375" y="370" />
+        <di:waypoint x="1416" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_10" bpmnElement="Flow_10">
+        <di:waypoint x="1440" y="346" />
+        <di:waypoint x="1440" y="270" />
+        <di:waypoint x="1110" y="270" />
+        <di:waypoint x="1110" y="255" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1280" y="244" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_11" bpmnElement="Flow_11">
+        <di:waypoint x="1464" y="370" />
+        <di:waypoint x="1507.5" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1435" y="384" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_12" bpmnElement="Flow_12">
+        <di:waypoint x="1595" y="410" />
+        <di:waypoint x="1595" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_13" bpmnElement="Flow_13">
+        <di:waypoint x="1682.5" y="555" />
+        <di:waypoint x="1736" y="555" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_14" bpmnElement="Flow_14">
+        <di:waypoint x="1760" y="531" />
+        <di:waypoint x="1760" y="315" />
+        <di:waypoint x="1817.5" y="315" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1730" y="454" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_15" bpmnElement="Flow_15">
+        <di:waypoint x="1784" y="555" />
+        <di:waypoint x="1817.5" y="555" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1750" y="564" width="100" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_16" bpmnElement="Flow_16">
+        <di:waypoint x="1900" y="520" />
+        <di:waypoint x="1900" y="465" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_17" bpmnElement="Flow_17">
+        <di:waypoint x="1982.5" y="315" />
+        <di:waypoint x="2070" y="315" />
+        <di:waypoint x="2070" y="348" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_18" bpmnElement="Flow_18">
+        <di:waypoint x="1982.5" y="430" />
+        <di:waypoint x="2070" y="430" />
+        <di:waypoint x="2070" y="392" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_19" bpmnElement="Flow_19">
+        <di:waypoint x="2092" y="370" />
+        <di:waypoint x="2230" y="370" />
+        <di:waypoint x="2230" y="695" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_20" bpmnElement="Flow_20">
+        <di:waypoint x="2320" y="735" />
+        <di:waypoint x="2354" y="735" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
