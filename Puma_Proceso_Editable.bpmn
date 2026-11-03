@@ -11,6 +11,7 @@
         <bpmn:flowNodeRef>gExtra</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>sinExtra</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>solicitar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>finOperario</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1" name="Sistema">
         <bpmn:flowNodeRef>validarJ</bpmn:flowNodeRef>
@@ -22,6 +23,8 @@
         <bpmn:flowNodeRef>aprobar</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>rechazar</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>union</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>bifurcar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>notificar</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_2" name="Supervisión de Producción">
         <bpmn:flowNodeRef>revisar</bpmn:flowNodeRef>
@@ -38,8 +41,8 @@
     </bpmn:startEvent>
     <bpmn:task id="jornada" name="Registrar entrada y, al finalizar, salida y pausas">
       <bpmn:incoming>Flow_0</bpmn:incoming>
-      <bpmn:outgoing>Flow_1</bpmn:outgoing>
       <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
     </bpmn:task>
     <bpmn:serviceTask id="validarJ" name="Validar jornada">
       <bpmn:incoming>Flow_1</bpmn:incoming>
@@ -64,8 +67,8 @@
     </bpmn:endEvent>
     <bpmn:task id="solicitar" name="Ingresar minutos y motivo; enviar solicitud">
       <bpmn:incoming>Flow_7</bpmn:incoming>
-      <bpmn:outgoing>Flow_8</bpmn:outgoing>
       <bpmn:incoming>Flow_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
     </bpmn:task>
     <bpmn:serviceTask id="validarS" name="Validar solicitud">
       <bpmn:incoming>Flow_8</bpmn:incoming>
@@ -106,12 +109,24 @@
       <bpmn:incoming>Flow_18</bpmn:incoming>
       <bpmn:outgoing>Flow_19</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:task id="reporte" name="Consultar reportes por empleado y período">
+    <bpmn:parallelGateway id="bifurcar" name="">
       <bpmn:incoming>Flow_19</bpmn:incoming>
       <bpmn:outgoing>Flow_20</bpmn:outgoing>
+      <bpmn:outgoing>Flow_22</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:serviceTask id="notificar" name="Publicar resolución y notificación en la aplicación">
+      <bpmn:incoming>Flow_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_21</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="finOperario" name="Operario notificado">
+      <bpmn:incoming>Flow_21</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="reporte" name="Consultar reportes por empleado y período">
+      <bpmn:incoming>Flow_22</bpmn:incoming>
+      <bpmn:outgoing>Flow_23</bpmn:outgoing>
     </bpmn:task>
     <bpmn:endEvent id="fin" name="Consulta finalizada">
-      <bpmn:incoming>Flow_20</bpmn:incoming>
+      <bpmn:incoming>Flow_23</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0" sourceRef="inicio" targetRef="jornada" name="" />
     <bpmn:sequenceFlow id="Flow_1" sourceRef="jornada" targetRef="validarJ" name="" />
@@ -132,25 +147,28 @@
     <bpmn:sequenceFlow id="Flow_16" sourceRef="motivo" targetRef="rechazar" name="" />
     <bpmn:sequenceFlow id="Flow_17" sourceRef="aprobar" targetRef="union" name="" />
     <bpmn:sequenceFlow id="Flow_18" sourceRef="rechazar" targetRef="union" name="" />
-    <bpmn:sequenceFlow id="Flow_19" sourceRef="union" targetRef="reporte" name="" />
-    <bpmn:sequenceFlow id="Flow_20" sourceRef="reporte" targetRef="fin" name="" />
+    <bpmn:sequenceFlow id="Flow_19" sourceRef="union" targetRef="bifurcar" name="" />
+    <bpmn:sequenceFlow id="Flow_20" sourceRef="bifurcar" targetRef="notificar" name="" />
+    <bpmn:sequenceFlow id="Flow_21" sourceRef="notificar" targetRef="finOperario" name="" />
+    <bpmn:sequenceFlow id="Flow_22" sourceRef="bifurcar" targetRef="reporte" name="" />
+    <bpmn:sequenceFlow id="Flow_23" sourceRef="reporte" targetRef="fin" name="" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="Diagram_Puma">
     <bpmndi:BPMNPlane id="Plane_Puma" bpmnElement="Collaboration_Puma">
       <bpmndi:BPMNShape id="Shape_Pool_Puma" bpmnElement="Pool_Puma" isHorizontal="true">
-        <dc:Bounds x="20" y="100" width="2390" height="710" />
+        <dc:Bounds x="20" y="100" width="2620" height="710" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_0" bpmnElement="Lane_0" isHorizontal="true">
-        <dc:Bounds x="55" y="100" width="2355" height="180" />
+        <dc:Bounds x="55" y="100" width="2585" height="180" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_1" bpmnElement="Lane_1" isHorizontal="true">
-        <dc:Bounds x="55" y="280" width="2355" height="200" />
+        <dc:Bounds x="55" y="280" width="2585" height="200" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_2" bpmnElement="Lane_2" isHorizontal="true">
-        <dc:Bounds x="55" y="480" width="2355" height="180" />
+        <dc:Bounds x="55" y="480" width="2585" height="180" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_3" bpmnElement="Lane_3" isHorizontal="true">
-        <dc:Bounds x="55" y="660" width="2355" height="150" />
+        <dc:Bounds x="55" y="660" width="2585" height="150" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_inicio" bpmnElement="inicio">
         <dc:Bounds x="129.0" y="169.0" width="32" height="32" />
@@ -224,13 +242,25 @@
           <dc:Bounds x="1985" y="293" width="170" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_bifurcar" bpmnElement="bifurcar">
+        <dc:Bounds x="2178.0" y="348.0" width="44" height="44" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_notificar" bpmnElement="notificar">
+        <dc:Bounds x="2307.5" y="330.0" width="185" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_finOperario" bpmnElement="finOperario">
+        <dc:Bounds x="2584.0" y="174.0" width="32" height="32" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2425" y="165" width="170" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_reporte" bpmnElement="reporte">
-        <dc:Bounds x="2140.0" y="695.0" width="180" height="80" />
+        <dc:Bounds x="2310.0" y="695.0" width="180" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_fin" bpmnElement="fin">
-        <dc:Bounds x="2354.0" y="719.0" width="32" height="32" />
+        <dc:Bounds x="2584.0" y="719.0" width="32" height="32" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2285" y="760" width="170" height="40" />
+          <dc:Bounds x="2515" y="760" width="170" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_0" bpmnElement="Flow_0">
@@ -348,12 +378,26 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_19" bpmnElement="Flow_19">
         <di:waypoint x="2092" y="370" />
-        <di:waypoint x="2230" y="370" />
-        <di:waypoint x="2230" y="695" />
+        <di:waypoint x="2178" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_20" bpmnElement="Flow_20">
-        <di:waypoint x="2320" y="735" />
-        <di:waypoint x="2354" y="735" />
+        <di:waypoint x="2222" y="370" />
+        <di:waypoint x="2307.5" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_21" bpmnElement="Flow_21">
+        <di:waypoint x="2492.5" y="370" />
+        <di:waypoint x="2600" y="370" />
+        <di:waypoint x="2600" y="206" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_22" bpmnElement="Flow_22">
+        <di:waypoint x="2200" y="392" />
+        <di:waypoint x="2200" y="650" />
+        <di:waypoint x="2400" y="650" />
+        <di:waypoint x="2400" y="695" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_23" bpmnElement="Flow_23">
+        <di:waypoint x="2490" y="735" />
+        <di:waypoint x="2584" y="735" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
