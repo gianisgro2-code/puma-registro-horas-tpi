@@ -95,8 +95,7 @@ La documentación se prepara en ramas secundarias y se propone su
 integración a main mediante Pull Requests.
 
 Los commits deben describir claramente los cambios realizados.
-La revisión de pares debe ser efectuada por otra persona y quedar
-registrada en GitHub antes de la integración correspondiente.
+Según la aclaración del tutor para el trabajo individual, el propio autor puede crear e integrar un PR desde una rama de trabajo hacia main. No se atribuyen revisiones de terceros.
 
 El seguimiento del proyecto se realiza en el siguiente tablero público:
 
@@ -126,8 +125,7 @@ Estas correcciones muestran que la propuesta inicial de la IA
 necesitó contrastarse con el conocimiento del caso. La IA no puede
 confirmar por sí sola la estructura real de la empresa.
 
-La asistencia de IA no sustituye la revisión humana ni la revisión
-de pares del Pull Request. No se consideran realizadas pruebas,
+La asistencia de IA no sustituye la revisión y responsabilidad humana. No se consideran realizadas pruebas,
 revisiones o implementaciones sin evidencia.
 
 El estudiante conserva la responsabilidad sobre la veracidad y
@@ -168,3 +166,31 @@ Si un resultado no cumple el estándar, se abrirá una issue con el problema, su
 ### Estado actual
 
 Las verificaciones están pendientes de ejecución porque el proyecto se encuentra en la etapa de análisis y documentación.
+
+## Documentación integrada para el coloquio
+
+Revisión: 2 de noviembre de 2026.
+
+- [PDF integrado TP1, TP2, TP3 y TP4](TPI_Final_Organizacion_Empresarial_Gianluca_Isgro.pdf)
+- [Proceso BPMN actualizado en PDF](Puma_Proceso_BPMN.pdf)
+- [Proceso editable BPMN](Puma_Proceso_Editable.bpmn)
+
+El proceso incorpora una notificación en la aplicación al operario después de resolver su solicitud. La consulta administrativa queda en una rama paralela. Es un modelo de diseño; no acredita implementación ni entrega de avisos reales.
+
+### Pull requests realizados
+
+- [PR #1: presentación, alcance y uso de IA](https://github.com/gianisgro2-code/puma-registro-horas-tpi/pull/1)
+- [PR #5: proceso BPMN](https://github.com/gianisgro2-code/puma-registro-horas-tpi/pull/5)
+- [PR #6: encabezado de indicadores](https://github.com/gianisgro2-code/puma-registro-horas-tpi/pull/6)
+- [PR #7: enlace al tablero](https://github.com/gianisgro2-code/puma-registro-horas-tpi/pull/7)
+
+Los cuatro fueron integrados a main por su autor.
+
+### Capturas reales del proyecto
+
+- [Rama y archivos antes de integrar BPMN](captura_rama.png)
+- [PR #5 integrado](captura_pr.png)
+- [Tablero con BPMN en curso](captura_tablero_en_progreso.png)
+- [Tablero con BPMN terminado](captura_tablero_listo.png)
+
+Las imágenes fueron aportadas por el estudiante el 29 de octubre de 2026 y muestran el avance de esa sesión. Las historias continúan pendientes de implementación; no se presentan como funcionalidades terminadas.
